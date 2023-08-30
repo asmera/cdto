@@ -63,26 +63,28 @@
 {
     NSMutableString *scriptStr =
     [NSMutableString stringWithFormat:
-     @"tell application \"iTerm\"\n"
-      "   set aWindow to current window\n"
-      ""
-      "   if aWindow is missing value then\n"
-      "       delay 0.4\n"
-      "       set aWindow to current window\n"
-      "   end if\n"];
+     @"tell application \"iTerm\"\n"];
     
     if (!isFirtLaunch) {
         [scriptStr appendString:
-         @"   create window with default profile\n"
-          "   set aWindow to current window\n"];
+         @" create window with default profile\n"];
     }
 
+    [scriptStr appendString:
+     @"  set aWindow to current window\n"
+      "  set aCount to 0\n"
+      "  repeat while aWindow is missing value and aCount < 10\n"
+      "    delay 0.1\n"
+      "    set aWindow to current window\n"
+      "    set aCount to aCount + 1\n"
+      "  end repeat\n"];
+
     [scriptStr appendFormat:
-     @"   tell current tab of aWindow\n"
-      "       tell current session\n"
-      "           write text \"cd '%@'\"\n"
-      "       end tell\n"
-      "   end tell\n"
+     @"  tell current tab of aWindow\n"
+      "    tell current session\n"
+      "      write text \"cd '%@'\"\n"
+      "    end tell\n"
+      "  end tell\n"
       "end tell", self.path];
     
     NSAppleScript *sc = [[NSAppleScript alloc] initWithSource:scriptStr];
