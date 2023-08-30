@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		616AFFF32A9F27340049C3D2 /* CDTOLauncher.m in Sources */ = {isa = PBXBuildFile; fileRef = 616AFFF22A9F27340049C3D2 /* CDTOLauncher.m */; };
+		616AFFF62A9F2D6E0049C3D2 /* OptionProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 616AFFF52A9F2D6E0049C3D2 /* OptionProcessor.m */; };
 		61CA59A52A9DDE8A00D8128D /* TerminalLauncher.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CA59A32A9DDE8A00D8128D /* TerminalLauncher.m */; };
 		61CA59A62A9DDE8A00D8128D /* iTermLauncher.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CA59A42A9DDE8A00D8128D /* iTermLauncher.m */; };
 		699EB3C0234DBA0D00CC2315 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 699EB3BF234DBA0D00CC2315 /* Assets.xcassets */; };
@@ -18,6 +19,8 @@
 /* Begin PBXFileReference section */
 		616AFFF12A9F27340049C3D2 /* CDTOLauncher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDTOLauncher.h; sourceTree = "<group>"; };
 		616AFFF22A9F27340049C3D2 /* CDTOLauncher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDTOLauncher.m; sourceTree = "<group>"; };
+		616AFFF42A9F2D6E0049C3D2 /* OptionProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionProcessor.h; sourceTree = "<group>"; };
+		616AFFF52A9F2D6E0049C3D2 /* OptionProcessor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OptionProcessor.m; sourceTree = "<group>"; };
 		61CA59A02A9DDE8A00D8128D /* iTermLauncher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTermLauncher.h; sourceTree = "<group>"; };
 		61CA59A12A9DDE8A00D8128D /* TerminalLauncher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerminalLauncher.h; sourceTree = "<group>"; };
 		61CA59A22A9DDE8A00D8128D /* LauncherProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LauncherProtocol.h; sourceTree = "<group>"; };
@@ -70,6 +73,8 @@
 				699EB3C4234DBA0D00CC2315 /* Info.plist */,
 				699EB3C5234DBA0D00CC2315 /* main.m */,
 				699EB3C7234DBA0D00CC2315 /* cd_to.entitlements */,
+				616AFFF42A9F2D6E0049C3D2 /* OptionProcessor.h */,
+				616AFFF52A9F2D6E0049C3D2 /* OptionProcessor.m */,
 				616AFFF12A9F27340049C3D2 /* CDTOLauncher.h */,
 				616AFFF22A9F27340049C3D2 /* CDTOLauncher.m */,
 				61CA59A02A9DDE8A00D8128D /* iTermLauncher.h */,
@@ -107,7 +112,8 @@
 		699EB3B1234DBA0C00CC2315 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1330;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "Jay Tuley";
 				TargetAttributes = {
 					699EB3B8234DBA0C00CC2315 = {
@@ -154,6 +160,7 @@
 				699EB3C6234DBA0D00CC2315 /* main.m in Sources */,
 				616AFFF32A9F27340049C3D2 /* CDTOLauncher.m in Sources */,
 				61CA59A52A9DDE8A00D8128D /* TerminalLauncher.m in Sources */,
+				616AFFF62A9F2D6E0049C3D2 /* OptionProcessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +201,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -253,6 +261,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -280,6 +289,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = VURRGRYW45;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "cd to .../Info.plist";
@@ -302,6 +312,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = VURRGRYW45;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "cd to .../Info.plist";

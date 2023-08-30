@@ -7,27 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+
+#import "OptionProcessor.h"
 #import "CDTOLauncher.h"
 
 int main(int argc, const char * argv[])
 {
     @autoreleasepool {
-        if (argc > 1) {
-            BOOL changedSetting = NO;
-            const char *lastOption = argv[1];
-            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-            
-            if (strcmp("-use-iTerm", lastOption) == 0) {
-                [userDefault setBool:YES forKey:@"cdto-use-iTerm"];
-                changedSetting = YES;
-            }
-            else if (strcmp("-use-native", lastOption) == 0) {
-                [userDefault setBool:NO forKey:@"cdto-use-iTerm"];
-                changedSetting = YES;
-            }
-            if (changedSetting) {
-                return 0;
-            }
+        BOOL ret = [OptionProcessor processOptionWithArgc:argc argv:argv];
+        if (ret) {
+            return 0;
         }
         
         [CDTOLauncher launch];
