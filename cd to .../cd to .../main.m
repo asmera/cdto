@@ -32,7 +32,7 @@ int main(int argc, const char * argv[]) {
                 return 0;
             }
         }
-
+        
         // Setup code that might create autoreleased objects goes here.
         FinderApplication* finder = [SBApplication applicationWithBundleIdentifier:@"com.apple.Finder"];
         
@@ -55,17 +55,20 @@ int main(int argc, const char * argv[]) {
         }
         
         NSURL* url = [NSURL URLWithString:fileUrl];
-        if (url != nil) {
-            Class launcherClass = nil;
-            if ([userDefault boolForKey:@"cdto-use-iTerm"]) {
-                launcherClass = iTermLauncher.class;
-            }
-            else {
-                launcherClass = TerminalLauncher.class;
-            }
-            
-            id<LauncherProtocol> launcher = [launcherClass launcherWithURL:url];
-            [launcher run];
+        if (url == nil) {
+            NSString *path = NSHomeDirectory();
+            url = [NSURL fileURLWithPath:path];
         }
+        
+        Class launcherClass = nil;
+        if ([userDefault boolForKey:@"cdto-use-iTerm"]) {
+            launcherClass = iTermLauncher.class;
+        }
+        else {
+            launcherClass = TerminalLauncher.class;
+        }
+        
+        id<LauncherProtocol> launcher = [launcherClass launcherWithURL:url];
+        [launcher run];
     }
 }
