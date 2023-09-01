@@ -9,29 +9,9 @@
 #import "TerminalLauncher.h"
 #import "Terminal.h"
 
-@interface TerminalLauncher()
-
-@property (nonatomic, strong) NSURL *url;
-
-@end
-
 @implementation TerminalLauncher
 
-+ (instancetype)launcherWithURL:(NSURL *)url
-{
-    return [[TerminalLauncher alloc] initWithURL:url];
-}
-
-- (instancetype)initWithURL:(NSURL *)url
-{
-    self = [super init];
-    if (self) {
-        self.url = url;
-    }
-    return self;
-}
-
-- (void)run
++ (void)launchWithURL:(NSURL *)url
 {
     TerminalApplication* terminal = [SBApplication applicationWithBundleIdentifier:@"com.apple.Terminal"];
     TerminalWindow* win = nil;
@@ -40,7 +20,7 @@
         win = [[terminal windows] objectAtLocation:@1];
         win = [[terminal windows] objectWithID: [NSNumber numberWithInteger:win.id]];
     }
-    [terminal open:@[self.url]];
+    [terminal open:@[url]];
     //get front most and then reference by id
     TerminalWindow* newWin = [[terminal windows] objectAtLocation:@1];
     newWin = [[terminal windows] objectWithID: [NSNumber numberWithInteger:newWin.id]];
@@ -66,11 +46,11 @@
             if(![tab busy]){
                 //if history has same number of lines as new window
                 // assume automatically opened new window, and close it
-                NSUInteger oldTabLines = [self linesOfHistory:tab];
+                NSUInteger oldTabLines = [TerminalLauncher linesOfHistory:tab];
                 while([newTab busy]){
                     [NSThread sleepForTimeInterval:0.1f];
                 }
-                NSUInteger newTabLines = [self linesOfHistory:newTab];
+                NSUInteger newTabLines = [TerminalLauncher linesOfHistory:newTab];
                 if(oldTabLines == newTabLines){
                     [win closeSaving:TerminalSaveOptionsNo savingIn:nil];
                 }
@@ -81,7 +61,7 @@
     [terminal activate];
 }
 
-- (NSUInteger)linesOfHistory:(TerminalTab *)tab
++ (NSUInteger)linesOfHistory:(TerminalTab *)tab
 {
     NSString* hist = [[tab history] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     return [[hist componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] count];

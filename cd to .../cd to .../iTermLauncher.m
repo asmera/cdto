@@ -10,28 +10,9 @@
 #import <Cocoa/Cocoa.h>
 #import <ScriptingBridge/ScriptingBridge.h>
 
-@interface iTermLauncher()
-
-@property (nonatomic, strong) NSString *path;
-
-@end
-
 @implementation iTermLauncher
 
-+ (instancetype)launcherWithURL:(NSURL *)url
-{
-    return [[iTermLauncher alloc] initWithTargetPath:url.path];
-}
-
-- (instancetype)initWithTargetPath:(NSString *)path
-{
-    if (self = [super init]) {
-        self.path = path;
-    }
-    return self;
-}
-
-- (void)run
++ (void)launchWithURL:(NSURL *)url
 {
     NSString * const iTermBundleId = @"com.googlecode.iterm2";
     
@@ -39,15 +20,17 @@
     if (!terminal.isRunning) {
         dispatch_semaphore_t sema = dispatch_semaphore_create(0);
         NSWorkspace *ws = NSWorkspace.sharedWorkspace;
-        NSURL *url = [ws URLForApplicationWithBundleIdentifier:iTermBundleId];
-        [ws openApplicationAtURL:url configuration:NSWorkspaceOpenConfiguration.configuration completionHandler:^(NSRunningApplication * _Nullable app, NSError * _Nullable error) {
+        NSURL *appURL = [ws URLForApplicationWithBundleIdentifier:iTermBundleId];
+        [ws openApplicationAtURL:appURL
+                   configuration:NSWorkspaceOpenConfiguration.configuration
+               completionHandler:^(NSRunningApplication * _Nullable app, NSError * _Nullable error) {
             SBApplication *terminal = [SBApplication applicationWithBundleIdentifier:iTermBundleId];
             [terminal activate];
             
             while ([[terminal performSelector:@selector(windows)] firstObject] == nil) {
                 [NSThread sleepForTimeInterval:0.2];
             }
-            [self _runAppleScript:YES];
+            [iTermLauncher _runAppleScript:YES withPath:url.path];
             dispatch_semaphore_signal(sema);
         }];
         dispatch_time_t waitTime = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
@@ -55,11 +38,11 @@
     }
     else {
         [terminal activate];
-        [self _runAppleScript:NO];
+        [iTermLauncher _runAppleScript:NO withPath:url.path];
     }
 }
 
-- (void)_runAppleScript:(BOOL)isFirtLaunch
++ (void)_runAppleScript:(BOOL)isFirtLaunch withPath:(NSString *)path
 {
     NSMutableString *scriptStr =
     [NSMutableString stringWithFormat:
@@ -98,7 +81,7 @@
       "      write text \"cd '%@'\"\n"
       "    end tell\n"
       "  end tell\n"
-      "end tell", self.path];
+      "end tell", path];
     
     NSAppleScript *sc = [[NSAppleScript alloc] initWithSource:scriptStr];
     NSDictionary *retDic = nil;
