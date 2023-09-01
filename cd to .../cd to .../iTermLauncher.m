@@ -78,6 +78,17 @@
       "    set aWindow to current window\n"
       "    set aCount to aCount + 1\n"
       "  end repeat\n"];
+    
+    if (isFirtLaunch) {
+        [scriptStr appendString:
+         @"  tell aWindow\n"
+          "    set aTab to current tab\n"
+          "    repeat while aTab is missing value\n"
+          "      delay 0.1\n"
+          "      set aTab to current tab\n"
+          "    end repeat\n"
+          "  end tell\n"];
+    }
 
     [scriptStr appendFormat:
      @"  tell current tab of aWindow\n"
