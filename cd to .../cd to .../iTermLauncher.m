@@ -83,9 +83,11 @@
         [scriptStr appendString:
          @"  tell aWindow\n"
           "    set aTab to current tab\n"
-          "    repeat while aTab is missing value\n"
+          "    set aCount to 0\n"
+          "    repeat while aTab is missing value and aCount < 10\n"
           "      delay 0.1\n"
           "      set aTab to current tab\n"
+          "      set aCount to aCount + 1\n"
           "    end repeat\n"
           "  end tell\n"];
     }
