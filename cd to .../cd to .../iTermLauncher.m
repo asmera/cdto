@@ -36,25 +36,20 @@
     NSString * const iTermBundleId = @"com.googlecode.iterm2";
     
     SBApplication *terminal = [SBApplication applicationWithBundleIdentifier:iTermBundleId];
-    if (!terminal.isRunning) {
-        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-        NSWorkspace *ws = NSWorkspace.sharedWorkspace;
-        NSURL *url = [ws URLForApplicationWithBundleIdentifier:iTermBundleId];
-        [ws openApplicationAtURL:url configuration:NSWorkspaceOpenConfiguration.configuration completionHandler:^(NSRunningApplication * _Nullable app, NSError * _Nullable error) {
-            SBApplication *terminal = [SBApplication applicationWithBundleIdentifier:iTermBundleId];
-            [terminal activate];
-            
+    BOOL running = terminal.isRunning;
+    [terminal activate];
+    if (!running) {
+        NSCondition *c = [[NSCondition alloc] init];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
             while ([[terminal performSelector:@selector(windows)] firstObject] == nil) {
                 [NSThread sleepForTimeInterval:0.2];
             }
             [self _runAppleScript:YES];
-            dispatch_semaphore_signal(sema);
-        }];
-        dispatch_time_t waitTime = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
-        dispatch_semaphore_wait(sema, waitTime);
+            [c signal];
+        });
+        [c waitUntilDate:[NSDate.date dateByAddingTimeInterval:5]];
     }
     else {
-        [terminal activate];
         [self _runAppleScript:NO];
     }
 }
