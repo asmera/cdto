@@ -26,8 +26,7 @@
         launcherClass = TerminalLauncher.class;
     }
     
-    id<LauncherProtocol> launcher = [launcherClass launcherWithURL:[self urlFromFinder]];
-    [launcher run];
+    [launcherClass launchWithURL:[CDTOLauncher urlFromFinder]];
 }
 
 + (NSURL *)urlFromFinder

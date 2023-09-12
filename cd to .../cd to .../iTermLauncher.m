@@ -10,28 +10,9 @@
 #import <Cocoa/Cocoa.h>
 #import <ScriptingBridge/ScriptingBridge.h>
 
-@interface iTermLauncher()
-
-@property (nonatomic, strong) NSString *path;
-
-@end
-
 @implementation iTermLauncher
 
-+ (instancetype)launcherWithURL:(NSURL *)url
-{
-    return [[iTermLauncher alloc] initWithTargetPath:url.path];
-}
-
-- (instancetype)initWithTargetPath:(NSString *)path
-{
-    if (self = [super init]) {
-        self.path = path;
-    }
-    return self;
-}
-
-- (void)run
++ (void)launchWithURL:(NSURL *)url
 {
     NSString * const iTermBundleId = @"com.googlecode.iterm2";
     
@@ -44,17 +25,17 @@
             while ([[terminal performSelector:@selector(windows)] firstObject] == nil) {
                 [NSThread sleepForTimeInterval:0.2];
             }
-            [self _runAppleScript:YES];
+            [iTermLauncher _runAppleScript:YES withPath:url.path];
             [c signal];
         });
         [c waitUntilDate:[NSDate.date dateByAddingTimeInterval:5]];
     }
     else {
-        [self _runAppleScript:NO];
+        [iTermLauncher _runAppleScript:NO withPath:url.path];
     }
 }
 
-- (void)_runAppleScript:(BOOL)isFirtLaunch
++ (void)_runAppleScript:(BOOL)isFirtLaunch withPath:(NSString *)path
 {
     NSMutableString *scriptStr =
     [NSMutableString stringWithFormat:
@@ -93,7 +74,7 @@
       "      write text \"cd '%@'\"\n"
       "    end tell\n"
       "  end tell\n"
-      "end tell", self.path];
+      "end tell", path];
     
     NSAppleScript *sc = [[NSAppleScript alloc] initWithSource:scriptStr];
     NSDictionary *retDic = nil;

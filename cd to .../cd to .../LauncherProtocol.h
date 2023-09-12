@@ -11,8 +11,7 @@
 
 @protocol LauncherProtocol <NSObject>
 
-+ (instancetype)launcherWithURL:(NSURL *)url;
-- (void)run;
++ (void)launchWithURL:(NSURL *)url;
 
 @end
 
